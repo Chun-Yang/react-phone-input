@@ -1,19 +1,15 @@
-// TODO - fix the onlyContries props. Currently expects that as an array of country object, but users should be able to send in array of country isos
-
 import { some, find, reduce, map, filter, includes } from 'lodash/collection';
 import { findIndex, first, rest } from 'lodash/array';
 import { debounce, memoize } from 'lodash/function';
 import { trim, startsWith } from 'lodash/string';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import countryData from './country_data.js';
 import classNames from 'classnames';
+import countryData from './country_data.js';
 
 let allCountries = countryData.allCountries;
 
 let isModernBrowser = Boolean(document.createElement('input').setSelectionRange);
-
-var style = require('./react-phone-input-style.less');
 
 let keys = {
   UP: 38,
@@ -514,18 +510,18 @@ ReactPhoneInput.prototype._searchCountry = memoize(function(queryString){
 ReactPhoneInput.prototype.guessSelectedCountry = memoize(function(inputNumber, onlyCountries) {
   var secondBestGuess = find(allCountries, {iso2: this.props.defaultCountry}) || onlyCountries[0];
   if(trim(inputNumber) !== '') {
-      var bestGuess = reduce(onlyCountries, function(selectedCountry, country) {
-                      if(startsWith(inputNumber, country.dialCode)) {
-                          if(country.dialCode.length > selectedCountry.dialCode.length) {
-                              return country;
-                          }
-                          if(country.dialCode.length === selectedCountry.dialCode.length && country.priority < selectedCountry.priority) {
-                              return country;
-                          }
-                      }
+    var bestGuess = reduce(onlyCountries, function(selectedCountry, country) {
+      if(startsWith(inputNumber, country.dialCode)) {
+        if(country.dialCode.length > selectedCountry.dialCode.length) {
+          return country;
+        }
+        if(country.dialCode.length === selectedCountry.dialCode.length && country.priority < selectedCountry.priority) {
+          return country;
+        }
+      }
 
-                      return selectedCountry;
-                  }, {dialCode: '', priority: 10001}, this);
+      return selectedCountry;
+    }, {dialCode: '', priority: 10001}, this);
   } else {
       return secondBestGuess;
   }

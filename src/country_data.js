@@ -7,7 +7,6 @@
 //    Order (if >1 country with same dial code),
 //    Area codes (if >1 country with same dial code)
 // ]
-var _ = require('lodash');
 
 var allCountries = [
     [
@@ -1245,17 +1244,6 @@ var index = priority || 0;
 allCountryCodes[dialCode][index] = iso2;
 };
 
-// loop over all of the countries above
-// allCountries2 = _.map(allCountries, function(country) {
-//   return {
-//     name: country[0],
-//     iso2: country[1],
-//     dialCode: country[2],
-//     format: country[3],
-//     hasAreaCodes: country.length > 4
-//   }
-// });
-
 for (var i = 0; i < allCountries.length; i++) {
     // countries
     var c = allCountries[i];
@@ -1285,6 +1273,6 @@ for (var i = 0; i < allCountries.length; i++) {
 }
 
 module.exports = {
-            allCountries: allCountries,
-            allCountryCodes: allCountryCodes
-        };
+  allCountries: allCountries,
+  allCountryCodes: allCountryCodes
+};
