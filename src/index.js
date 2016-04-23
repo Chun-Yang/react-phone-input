@@ -1,3 +1,5 @@
+// TODO - fix the onlyContries props. Currently expects that as an array of country object, but users should be able to send in array of country isos
+
 import { some, find, reduce, map, filter, includes } from 'lodash/collection';
 import { findIndex, first, rest } from 'lodash/array';
 import { debounce, memoize } from 'lodash/function';
@@ -533,6 +535,7 @@ ReactPhoneInput.prototype.guessSelectedCountry = memoize(function(inputNumber, o
 ReactPhoneInput.defaultProps = {
   value: '',
   autoFormat: true,
+  preferredCountries: [],
   onlyCountries: [],
   excludeCountries: [],
   defaultCountry: allCountries[0].iso2,
@@ -542,15 +545,15 @@ ReactPhoneInput.defaultProps = {
 };
 
 ReactPhoneInput.propTypes = {
-    value: React.PropTypes.string,
-    autoFormat: React.PropTypes.bool,
-    defaultCountry: React.PropTypes.string,
-    onlyCountries: React.PropTypes.arrayOf(React.PropTypes.string),
-    preferredCountries: React.PropTypes.arrayOf(React.PropTypes.string),
-    onChange: React.PropTypes.func,
-    onFocus: React.PropTypes.func,
-    onClick: React.PropTypes.func,
-    onKeyDown: React.PropTypes.func
+  value: React.PropTypes.string,
+  autoFormat: React.PropTypes.bool,
+  defaultCountry: React.PropTypes.string,
+  onlyCountries: React.PropTypes.arrayOf(React.PropTypes.string),
+  preferredCountries: React.PropTypes.arrayOf(React.PropTypes.string),
+  onChange: React.PropTypes.func,
+  onFocus: React.PropTypes.func,
+  onClick: React.PropTypes.func,
+  onKeyDown: React.PropTypes.func
 };
 
 export default ReactPhoneInput;
