@@ -450,10 +450,15 @@ class ReactPhoneInput extends React.Component {
       "arrow": true,
       "up": this.state.showDropDown
     });
+
+    let isValidNumber = this.props.isValid(
+      this.state.formattedNumber.replace(/\D/g, '')
+    )
+
     let inputClasses = classNames({
       "form-control": true,
-      "invalid-number": !this.props.isValid(this.state.formattedNumber.replace(/\D/g, ''))
-    });
+      "invalid-number": !isValidNumber,
+    }, this.props.className);
 
     let flagViewClasses = classNames({
       "flag-dropdown": true,
