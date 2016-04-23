@@ -4,7 +4,6 @@
   "description": "A react component to format phone numbers",
   "main": "dist/index.js",
   "scripts": {
-    "prepublish": "npm run build",
     "build": "babel src --out-dir dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
