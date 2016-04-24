@@ -562,7 +562,7 @@ var ReactPhoneInput = function (_React$Component) {
         "open-dropdown": this.state.showDropDown
       });
 
-      var inputFlagClasses = 'flag ' + this.state.selectedCountry.iso2;
+      var inputFlagClasses = (0, _classnames2.default)('flag', this.state.selectedCountry.iso2, { 'single': this.isSingleCountry() });
 
       return _react2.default.createElement(
         'div',
