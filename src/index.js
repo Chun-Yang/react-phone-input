@@ -77,7 +77,6 @@ class ReactPhoneInput extends React.Component {
     this._cursorToEnd = this._cursorToEnd.bind(this);
     this.guessSelectedCountry = this.guessSelectedCountry.bind(this);
     this.getElement = this.getElement.bind(this);
-    this.handleFlagDropdownClick = this.handleFlagDropdownClick.bind(this);
     this.handleInput = this.handleInput.bind(this);
     this.handleInputClick = this.handleInputClick.bind(this);
     this.handleFlagItemClick = this.handleFlagItemClick.bind(this);
@@ -102,6 +101,14 @@ class ReactPhoneInput extends React.Component {
     };
   }
 
+  componentDidMount() {
+    document.addEventListener('keydown', this.handleKeydown);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.handleKeydown);
+  }
+
   getNumber() {
     return this.state.formattedNumber !== '+' ? this.state.formattedNumber : '';
   }
@@ -110,12 +117,8 @@ class ReactPhoneInput extends React.Component {
     return this.getNumber();
   }
 
-  componentDidMount() {
-    document.addEventListener('keydown', this.handleKeydown);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('keydown', this.handleKeydown);
+  isSingleCountry() {
+    return _.size(this.state.onlyCountries) === 1;
   }
 
   scrollTo(country, middle) {
@@ -201,6 +204,10 @@ class ReactPhoneInput extends React.Component {
   }
 
   handleFlagDropdownClick() {
+    if (this.isSingleCountry()) {
+      return;
+    }
+
     // need to put the highlight on the current selected country if the dropdown is going to open up
     this.setState({
       showDropDown: !this.state.showDropDown,
@@ -485,9 +492,17 @@ class ReactPhoneInput extends React.Component {
           className={inputClasses}
         />
         <div ref="flagDropDownButton" className={flagViewClasses} onKeyDown={this.handleKeydown} >
-          <div ref='selectedFlag' onClick={this.handleFlagDropdownClick} className='selected-flag' title={`${this.state.selectedCountry.name}: + ${this.state.selectedCountry.dialCode}`}>
+          <div
+            ref='selectedFlag'
+            onClick={() => {this.handleFlagDropdownClick}}
+            className='selected-flag'
+            title={`${this.state.selectedCountry.name}: + ${this.state.selectedCountry.dialCode}`}>
             <div className={inputFlagClasses}>
-              <div className={arrowClasses}></div>
+              {
+                this.isSingleCountry()
+                  ? null
+                  : <div className={arrowClasses}></div>
+              }
             </div>
           </div>
           {this.state.showDropDown ? this.getCountryDropDownList() : ''}

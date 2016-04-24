@@ -122,7 +122,6 @@ var ReactPhoneInput = function (_React$Component) {
     _this._cursorToEnd = _this._cursorToEnd.bind(_this);
     _this.guessSelectedCountry = _this.guessSelectedCountry.bind(_this);
     _this.getElement = _this.getElement.bind(_this);
-    _this.handleFlagDropdownClick = _this.handleFlagDropdownClick.bind(_this);
     _this.handleInput = _this.handleInput.bind(_this);
     _this.handleInputClick = _this.handleInputClick.bind(_this);
     _this.handleFlagItemClick = _this.handleFlagItemClick.bind(_this);
@@ -149,6 +148,16 @@ var ReactPhoneInput = function (_React$Component) {
   }
 
   _createClass(ReactPhoneInput, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      document.addEventListener('keydown', this.handleKeydown);
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      document.removeEventListener('keydown', this.handleKeydown);
+    }
+  }, {
     key: 'getNumber',
     value: function getNumber() {
       return this.state.formattedNumber !== '+' ? this.state.formattedNumber : '';
@@ -159,14 +168,9 @@ var ReactPhoneInput = function (_React$Component) {
       return this.getNumber();
     }
   }, {
-    key: 'componentDidMount',
-    value: function componentDidMount() {
-      document.addEventListener('keydown', this.handleKeydown);
-    }
-  }, {
-    key: 'componentWillUnmount',
-    value: function componentWillUnmount() {
-      document.removeEventListener('keydown', this.handleKeydown);
+    key: 'isSingleCountry',
+    value: function isSingleCountry() {
+      return _lodash2.default.size(this.state.onlyCountries) === 1;
     }
   }, {
     key: 'scrollTo',
@@ -260,6 +264,10 @@ var ReactPhoneInput = function (_React$Component) {
     key: 'handleFlagDropdownClick',
     value: function handleFlagDropdownClick() {
       var _this2 = this;
+
+      if (this.isSingleCountry()) {
+        return;
+      }
 
       // need to put the highlight on the current selected country if the dropdown is going to open up
       this.setState({
@@ -533,6 +541,8 @@ var ReactPhoneInput = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
+      var _this7 = this;
+
       var wrapperClasses = (0, _classnames2.default)("react-tel-input", this.props.wrapperClassName);
 
       var arrowClasses = (0, _classnames2.default)({
@@ -574,11 +584,17 @@ var ReactPhoneInput = function (_React$Component) {
           { ref: 'flagDropDownButton', className: flagViewClasses, onKeyDown: this.handleKeydown },
           _react2.default.createElement(
             'div',
-            { ref: 'selectedFlag', onClick: this.handleFlagDropdownClick, className: 'selected-flag', title: this.state.selectedCountry.name + ': + ' + this.state.selectedCountry.dialCode },
+            {
+              ref: 'selectedFlag',
+              onClick: function onClick() {
+                _this7.handleFlagDropdownClick;
+              },
+              className: 'selected-flag',
+              title: this.state.selectedCountry.name + ': + ' + this.state.selectedCountry.dialCode },
             _react2.default.createElement(
               'div',
               { className: inputFlagClasses },
-              _react2.default.createElement('div', { className: arrowClasses })
+              this.isSingleCountry() ? null : _react2.default.createElement('div', { className: arrowClasses })
             )
           ),
           this.state.showDropDown ? this.getCountryDropDownList() : ''
