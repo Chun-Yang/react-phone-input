@@ -1,7 +1,5 @@
 import _ from 'lodash';
 import { find, reduce, map, filter, includes } from 'lodash/collection';
-import { findIndex, rest } from 'lodash/array';
-import { trim, startsWith } from 'lodash/string';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
@@ -27,7 +25,7 @@ let keys = {
 function isNumberValid(inputNumber) {
   let countries = countryData.allCountries;
   return _.some(countries, function(country) {
-    return startsWith(inputNumber, country.dialCode) || startsWith(country.dialCode, inputNumber);
+    return _.startsWith(inputNumber, country.dialCode) || _.startsWith(country.dialCode, inputNumber);
   });
 }
 
@@ -65,8 +63,8 @@ class ReactPhoneInput extends React.Component {
     let inputNumber = this.props.value || '';
     let onlyCountries = excludeCountries(getOnlyCountries(props.onlyCountries), props.excludeCountries);
     let selectedCountryGuess = this.guessSelectedCountry(inputNumber.replace(/\D/g, ''), onlyCountries);
-    let selectedCountryGuessIndex = findIndex(allCountries, selectedCountryGuess);
-    let dialCode = selectedCountryGuess && !startsWith(inputNumber, selectedCountryGuess.dialCode) ? selectedCountryGuess.dialCode : '';
+    let selectedCountryGuessIndex = _.findIndex(allCountries, selectedCountryGuess);
+    let dialCode = selectedCountryGuess && !_.startsWith(inputNumber, selectedCountryGuess.dialCode) ? selectedCountryGuess.dialCode : '';
     let formattedNumber = this.formatNumber(dialCode + inputNumber.replace(/\D/g, ''), selectedCountryGuess ? selectedCountryGuess.format : null);
     let preferredCountries = this.props.preferredCountries
       .map((preferredCountry) => find(allCountries, {ios2: preferredCountry}))
@@ -182,7 +180,7 @@ class ReactPhoneInput extends React.Component {
 
       return {
         formattedText: acc.formattedText + _.first(acc.remainingText),
-        remainingText: _.rest(acc.remainingText)
+        remainingText: _.tail(acc.remainingText)
       };
     }, {formattedText: '', remainingText: text.split('')});
     return formattedObject.formattedText + formattedObject.remainingText.join('');
@@ -207,7 +205,7 @@ class ReactPhoneInput extends React.Component {
     this.setState({
       showDropDown: !this.state.showDropDown,
       highlightCountry: find(this.state.onlyCountries, this.state.selectedCountry),
-      highlightCountryIndex: findIndex(this.state.onlyCountries, this.state.selectedCountry)
+      highlightCountryIndex: _.findIndex(this.state.onlyCountries, this.state.selectedCountry)
     }, () => {
       if(this.state.showDropDown) {
         this.scrollTo(this.getElement(this.state.highlightCountryIndex + this.state.preferredCountries.length));
@@ -330,7 +328,7 @@ class ReactPhoneInput extends React.Component {
 
   searchCountry() {
     const probableCandidate = this._searchCountry(this.state.queryString) || this.state.onlyCountries[0];
-    const probableCandidateIndex = findIndex(this.state.onlyCountries, probableCandidate) + this.state.preferredCountries.length;
+    const probableCandidateIndex = _.findIndex(this.state.onlyCountries, probableCandidate) + this.state.preferredCountries.length;
 
     this.scrollTo(this.getElement(probableCandidateIndex), true);
 
@@ -502,16 +500,16 @@ ReactPhoneInput.prototype._searchCountry = _.memoize(function(queryString){
   }
   // don't include the preferred countries in search
   let probableCountries = filter(this.state.onlyCountries, function(country) {
-    return startsWith(country.name.toLowerCase(), queryString.toLowerCase());
+    return _.startsWith(country.name.toLowerCase(), queryString.toLowerCase());
   }, this);
   return probableCountries[0];
 });
 
 ReactPhoneInput.prototype.guessSelectedCountry = _.memoize(function(inputNumber, onlyCountries) {
   var secondBestGuess = find(allCountries, {iso2: this.props.defaultCountry}) || onlyCountries[0];
-  if(trim(inputNumber) !== '') {
+  if(_.trim(inputNumber) !== '') {
     var bestGuess = reduce(onlyCountries, function(selectedCountry, country) {
-      if(startsWith(inputNumber, country.dialCode)) {
+      if(_.startsWith(inputNumber, country.dialCode)) {
         if(country.dialCode.length > selectedCountry.dialCode.length) {
           return country;
         }

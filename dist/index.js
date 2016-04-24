@@ -16,10 +16,6 @@ var _lodash2 = _interopRequireDefault(_lodash);
 
 var _collection = require('lodash/collection');
 
-var _array = require('lodash/array');
-
-var _string = require('lodash/string');
-
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
@@ -64,7 +60,7 @@ var keys = {
 function isNumberValid(inputNumber) {
   var countries = _countryData2.default.allCountries;
   return _lodash2.default.some(countries, function (country) {
-    return (0, _string.startsWith)(inputNumber, country.dialCode) || (0, _string.startsWith)(country.dialCode, inputNumber);
+    return _lodash2.default.startsWith(inputNumber, country.dialCode) || _lodash2.default.startsWith(country.dialCode, inputNumber);
   });
 }
 
@@ -112,8 +108,8 @@ var ReactPhoneInput = function (_React$Component) {
     var inputNumber = _this.props.value || '';
     var onlyCountries = excludeCountries(getOnlyCountries(props.onlyCountries), props.excludeCountries);
     var selectedCountryGuess = _this.guessSelectedCountry(inputNumber.replace(/\D/g, ''), onlyCountries);
-    var selectedCountryGuessIndex = (0, _array.findIndex)(allCountries, selectedCountryGuess);
-    var dialCode = selectedCountryGuess && !(0, _string.startsWith)(inputNumber, selectedCountryGuess.dialCode) ? selectedCountryGuess.dialCode : '';
+    var selectedCountryGuessIndex = _lodash2.default.findIndex(allCountries, selectedCountryGuess);
+    var dialCode = selectedCountryGuess && !_lodash2.default.startsWith(inputNumber, selectedCountryGuess.dialCode) ? selectedCountryGuess.dialCode : '';
     var formattedNumber = _this.formatNumber(dialCode + inputNumber.replace(/\D/g, ''), selectedCountryGuess ? selectedCountryGuess.format : null);
     var preferredCountries = _this.props.preferredCountries.map(function (preferredCountry) {
       return (0, _collection.find)(allCountries, { ios2: preferredCountry });
@@ -237,7 +233,7 @@ var ReactPhoneInput = function (_React$Component) {
 
         return {
           formattedText: acc.formattedText + _lodash2.default.first(acc.remainingText),
-          remainingText: _lodash2.default.rest(acc.remainingText)
+          remainingText: _lodash2.default.tail(acc.remainingText)
         };
       }, { formattedText: '', remainingText: text.split('') });
       return formattedObject.formattedText + formattedObject.remainingText.join('');
@@ -269,7 +265,7 @@ var ReactPhoneInput = function (_React$Component) {
       this.setState({
         showDropDown: !this.state.showDropDown,
         highlightCountry: (0, _collection.find)(this.state.onlyCountries, this.state.selectedCountry),
-        highlightCountryIndex: (0, _array.findIndex)(this.state.onlyCountries, this.state.selectedCountry)
+        highlightCountryIndex: _lodash2.default.findIndex(this.state.onlyCountries, this.state.selectedCountry)
       }, function () {
         if (_this2.state.showDropDown) {
           _this2.scrollTo(_this2.getElement(_this2.state.highlightCountryIndex + _this2.state.preferredCountries.length));
@@ -407,7 +403,7 @@ var ReactPhoneInput = function (_React$Component) {
     key: 'searchCountry',
     value: function searchCountry() {
       var probableCandidate = this._searchCountry(this.state.queryString) || this.state.onlyCountries[0];
-      var probableCandidateIndex = (0, _array.findIndex)(this.state.onlyCountries, probableCandidate) + this.state.preferredCountries.length;
+      var probableCandidateIndex = _lodash2.default.findIndex(this.state.onlyCountries, probableCandidate) + this.state.preferredCountries.length;
 
       this.scrollTo(this.getElement(probableCandidateIndex), true);
 
@@ -599,16 +595,16 @@ ReactPhoneInput.prototype._searchCountry = _lodash2.default.memoize(function (qu
   }
   // don't include the preferred countries in search
   var probableCountries = (0, _collection.filter)(this.state.onlyCountries, function (country) {
-    return (0, _string.startsWith)(country.name.toLowerCase(), queryString.toLowerCase());
+    return _lodash2.default.startsWith(country.name.toLowerCase(), queryString.toLowerCase());
   }, this);
   return probableCountries[0];
 });
 
 ReactPhoneInput.prototype.guessSelectedCountry = _lodash2.default.memoize(function (inputNumber, onlyCountries) {
   var secondBestGuess = (0, _collection.find)(allCountries, { iso2: this.props.defaultCountry }) || onlyCountries[0];
-  if ((0, _string.trim)(inputNumber) !== '') {
+  if (_lodash2.default.trim(inputNumber) !== '') {
     var bestGuess = (0, _collection.reduce)(onlyCountries, function (selectedCountry, country) {
-      if ((0, _string.startsWith)(inputNumber, country.dialCode)) {
+      if (_lodash2.default.startsWith(inputNumber, country.dialCode)) {
         if (country.dialCode.length > selectedCountry.dialCode.length) {
           return country;
         }
