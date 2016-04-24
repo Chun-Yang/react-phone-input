@@ -30,9 +30,9 @@ var _classnames = require('classnames');
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
-var _country_data = require('./country_data.js');
+var _countryData = require('./country-data.js');
 
-var _country_data2 = _interopRequireDefault(_country_data);
+var _countryData2 = _interopRequireDefault(_countryData);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -42,7 +42,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var allCountries = _country_data2.default.allCountries;
+var allCountries = _countryData2.default.allCountries;
 
 var isModernBrowser = Boolean(document.createElement('input').setSelectionRange);
 
@@ -60,7 +60,7 @@ var keys = {
 };
 
 function isNumberValid(inputNumber) {
-  var countries = _country_data2.default.allCountries;
+  var countries = _countryData2.default.allCountries;
   return (0, _collection.some)(countries, function (country) {
     return (0, _string.startsWith)(inputNumber, country.dialCode) || (0, _string.startsWith)(country.dialCode, inputNumber);
   });

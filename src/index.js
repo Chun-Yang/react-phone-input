@@ -1,11 +1,11 @@
-import { some, find, reduce, map, filter, includes } from 'lodash/collection';
-import { findIndex, first, rest } from 'lodash/array';
-import { debounce, memoize } from 'lodash/function';
+import _ from 'lodash';
+import { find, reduce, map, filter, includes } from 'lodash/collection';
+import { findIndex, rest } from 'lodash/array';
 import { trim, startsWith } from 'lodash/string';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
-import countryData from './country_data.js';
+import countryData from './country-data.js';
 
 let allCountries = countryData.allCountries;
 
@@ -26,7 +26,7 @@ let keys = {
 
 function isNumberValid(inputNumber) {
   let countries = countryData.allCountries;
-  return some(countries, function(country) {
+  return _.some(countries, function(country) {
     return startsWith(inputNumber, country.dialCode) || startsWith(country.dialCode, inputNumber);
   });
 }
@@ -99,7 +99,7 @@ class ReactPhoneInput extends React.Component {
       showDropDown: false,
       queryString: '',
       freezeSelection: false,
-      debouncedQueryStingSearcher: debounce(this.searchCountry, 100),
+      debouncedQueryStingSearcher: _.debounce(this.searchCountry, 100),
       onlyCountries: onlyCountries
     };
   }
@@ -181,8 +181,8 @@ class ReactPhoneInput extends React.Component {
       }
 
       return {
-        formattedText: acc.formattedText + first(acc.remainingText),
-        remainingText: rest(acc.remainingText)
+        formattedText: acc.formattedText + _.first(acc.remainingText),
+        remainingText: _.rest(acc.remainingText)
       };
     }, {formattedText: '', remainingText: text.split('')});
     return formattedObject.formattedText + formattedObject.remainingText.join('');
@@ -496,7 +496,7 @@ class ReactPhoneInput extends React.Component {
     );
   }
 }
-ReactPhoneInput.prototype._searchCountry = memoize(function(queryString){
+ReactPhoneInput.prototype._searchCountry = _.memoize(function(queryString){
   if(!queryString || queryString.length === 0) {
     return null;
   }
@@ -507,7 +507,7 @@ ReactPhoneInput.prototype._searchCountry = memoize(function(queryString){
   return probableCountries[0];
 });
 
-ReactPhoneInput.prototype.guessSelectedCountry = memoize(function(inputNumber, onlyCountries) {
+ReactPhoneInput.prototype.guessSelectedCountry = _.memoize(function(inputNumber, onlyCountries) {
   var secondBestGuess = find(allCountries, {iso2: this.props.defaultCountry}) || onlyCountries[0];
   if(trim(inputNumber) !== '') {
     var bestGuess = reduce(onlyCountries, function(selectedCountry, country) {
