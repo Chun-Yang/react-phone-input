@@ -559,10 +559,11 @@ var ReactPhoneInput = function (_React$Component) {
 
       var flagViewClasses = (0, _classnames2.default)({
         "flag-dropdown": true,
-        "open-dropdown": this.state.showDropDown
+        "open-dropdown": this.state.showDropDown,
+        "single": this.isSingleCountry()
       });
 
-      var inputFlagClasses = (0, _classnames2.default)('flag', this.state.selectedCountry.iso2, { 'single': this.isSingleCountry() });
+      var inputFlagClasses = (0, _classnames2.default)('flag', this.state.selectedCountry.iso2);
 
       return _react2.default.createElement(
         'div',
