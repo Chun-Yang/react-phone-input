@@ -768,6 +768,12 @@
 .react-tel-input .flag-dropdown:hover .selected-flag {
   background-color: #fff;
 }
+.react-tel-input .flag-dropdown.single:hover {
+  cursor: initial;
+}
+.react-tel-input .flag-dropdown.single:hover .selected-flag {
+  background-color: initial;
+}
 .react-tel-input input[disabled] + .flag-dropdown:hover {
   cursor: default;
 }
@@ -781,14 +787,14 @@
   height: 26px;
   border-radius: 3px 0 0 3px;
 }
-.react-tel-input .selected-flag .flag {
+.react-tel-input .flag-dropdown .selected-flag .flag {
   position: absolute;
   top: 50%;
   margin-top: -5px;
   left: 50%;
   margin-left: -11px;
 }
-.react-tel-input .selected-flag .flag .single {
+.react-tel-input .flag-dropdown.single .selected-flag .flag {
   margin-left: -8px;
 }
 .react-tel-input .selected-flag .arrow {

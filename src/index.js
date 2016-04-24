@@ -472,13 +472,13 @@ class ReactPhoneInput extends React.Component {
 
     let flagViewClasses = classNames({
       "flag-dropdown": true,
-      "open-dropdown": this.state.showDropDown
+      "open-dropdown": this.state.showDropDown,
+      "single": this.isSingleCountry()
     });
 
     let inputFlagClasses = classNames(
       'flag',
-      this.state.selectedCountry.iso2,
-      {'single': this.isSingleCountry()}
+      this.state.selectedCountry.iso2
     );
 
     return (
