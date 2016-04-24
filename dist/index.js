@@ -415,6 +415,8 @@ var ReactPhoneInput = function (_React$Component) {
   }, {
     key: 'handleKeydown',
     value: function handleKeydown(event) {
+      var _this5 = this;
+
       if (!this.state.showDropDown) {
         return;
       }
@@ -426,15 +428,11 @@ var ReactPhoneInput = function (_React$Component) {
         event.returnValue = false;
       }
 
-      function _moveHighlight(direction) {
-        var _this5 = this;
-
-        this.setState({
-          highlightCountryIndex: this._getHighlightCountryIndex(direction)
-        }, function () {
+      var _moveHighlight = function _moveHighlight(direction) {
+        _this5.setState({ highlightCountryIndex: _this5._getHighlightCountryIndex(direction) }, function () {
           _this5.scrollTo(_this5.getElement(_this5.state.highlightCountryIndex), true);
         });
-      }
+      };
 
       switch (event.which) {
         case keys.DOWN:
