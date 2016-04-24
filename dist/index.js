@@ -567,9 +567,9 @@ var ReactPhoneInput = function (_React$Component) {
 
       return _react2.default.createElement(
         'div',
-        { className: wrapperClasses },
+        { className: wrapperClasses, style: this.props.wrapperStyle },
         _react2.default.createElement('input', _extends({
-          placeholder: '+1 (702) 123-4567'
+          placeholder: '+1'
         }, this.props, {
           onChange: this.handleInput,
           onClick: this.handleInputClick,

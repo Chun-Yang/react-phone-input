@@ -482,9 +482,9 @@ class ReactPhoneInput extends React.Component {
     );
 
     return (
-      <div className={wrapperClasses}>
+      <div className={wrapperClasses} style={this.props.wrapperStyle}>
         <input
-          placeholder="+1 (702) 123-4567"
+          placeholder="+1"
           {...this.props}
           onChange={this.handleInput}
           onClick={this.handleInputClick}
