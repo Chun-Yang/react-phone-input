@@ -475,7 +475,11 @@ class ReactPhoneInput extends React.Component {
       "open-dropdown": this.state.showDropDown
     });
 
-    let inputFlagClasses = `flag ${this.state.selectedCountry.iso2}`;
+    let inputFlagClasses = classNames(
+      'flag',
+      this.state.selectedCountry.iso2,
+      {'single': this.isSingleCountry()}
+    );
 
     return (
       <div className={wrapperClasses}>
