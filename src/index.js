@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { find, reduce, map, filter, includes } from 'lodash/collection';
+import { find, reduce, filter, includes } from 'lodash/collection';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
@@ -399,7 +399,8 @@ class ReactPhoneInput extends React.Component {
   }
 
   getCountryDropDownList() {
-    let countryDropDownList = map(this.state.preferredCountries.concat(this.state.onlyCountries), function(country, index) {
+    const countries = this.state.preferredCountries.concat(this.state.onlyCountries);
+    let countryDropDownList = _.map(countries, (country, index) => {
       let itemClasses = classNames({
         country: true,
         preferred: country.iso2 === 'us' || country.iso2 === 'gb',
@@ -423,7 +424,7 @@ class ReactPhoneInput extends React.Component {
           <span className='dial-code'>{'+' + country.dialCode}</span>
         </li>
       );
-    }, this);
+    });
 
     const dashedLi = (<li key={'dashes'} className='divider' />);
     // let's insert a dashed line in between preffered countries and the rest
@@ -499,33 +500,33 @@ ReactPhoneInput.prototype._searchCountry = _.memoize(function(queryString){
     return null;
   }
   // don't include the preferred countries in search
-  let probableCountries = filter(this.state.onlyCountries, function(country) {
+  let probableCountries = filter(this.state.onlyCountries, (country) => {
     return _.startsWith(country.name.toLowerCase(), queryString.toLowerCase());
-  }, this);
+  });
   return probableCountries[0];
 });
 
 ReactPhoneInput.prototype.guessSelectedCountry = _.memoize(function(inputNumber, onlyCountries) {
-  var secondBestGuess = find(allCountries, {iso2: this.props.defaultCountry}) || onlyCountries[0];
-  if(_.trim(inputNumber) !== '') {
-    var bestGuess = reduce(onlyCountries, function(selectedCountry, country) {
-      if(_.startsWith(inputNumber, country.dialCode)) {
-        if(country.dialCode.length > selectedCountry.dialCode.length) {
-          return country;
-        }
-        if(country.dialCode.length === selectedCountry.dialCode.length && country.priority < selectedCountry.priority) {
-          return country;
-        }
-      }
-
-      return selectedCountry;
-    }, {dialCode: '', priority: 10001}, this);
-  } else {
-      return secondBestGuess;
+  var secondBestGuess = _.find(allCountries, {iso2: this.props.defaultCountry}) || onlyCountries[0];
+  if(_.trim(inputNumber) === '') {
+    return secondBestGuess;
   }
 
+  var bestGuess = _.reduce(onlyCountries, (selectedCountry, country) => {
+    if(_.startsWith(inputNumber, country.dialCode)) {
+      if(country.dialCode.length > selectedCountry.dialCode.length) {
+        return country;
+      }
+      if(country.dialCode.length === selectedCountry.dialCode.length && country.priority < selectedCountry.priority) {
+        return country;
+      }
+    }
+
+    return selectedCountry;
+  }, {dialCode: '', priority: 10001});
+
   if(!bestGuess.name) {
-      return secondBestGuess;
+    return secondBestGuess;
   }
 
   return bestGuess;

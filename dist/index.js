@@ -480,12 +480,15 @@ var ReactPhoneInput = function (_React$Component) {
   }, {
     key: 'getCountryDropDownList',
     value: function getCountryDropDownList() {
-      var countryDropDownList = (0, _collection.map)(this.state.preferredCountries.concat(this.state.onlyCountries), function (country, index) {
+      var _this6 = this;
+
+      var countries = this.state.preferredCountries.concat(this.state.onlyCountries);
+      var countryDropDownList = _lodash2.default.map(countries, function (country, index) {
         var itemClasses = (0, _classnames2.default)({
           country: true,
           preferred: country.iso2 === 'us' || country.iso2 === 'gb',
           active: country.iso2 === 'us',
-          highlight: this.state.highlightCountryIndex === index
+          highlight: _this6.state.highlightCountryIndex === index
         });
 
         var inputFlagClasses = 'flag ' + country.iso2;
@@ -499,7 +502,7 @@ var ReactPhoneInput = function (_React$Component) {
             className: itemClasses,
             'data-dial-code': '1',
             'data-country-code': country.iso2,
-            onClick: this.handleFlagItemClick.bind(this, country) },
+            onClick: _this6.handleFlagItemClick.bind(_this6, country) },
           _react2.default.createElement('div', { className: inputFlagClasses }),
           _react2.default.createElement(
             'span',
@@ -512,7 +515,7 @@ var ReactPhoneInput = function (_React$Component) {
             '+' + country.dialCode
           )
         );
-      }, this);
+      });
 
       var dashedLi = _react2.default.createElement('li', { key: 'dashes', className: 'divider' });
       // let's insert a dashed line in between preffered countries and the rest
@@ -596,28 +599,28 @@ ReactPhoneInput.prototype._searchCountry = _lodash2.default.memoize(function (qu
   // don't include the preferred countries in search
   var probableCountries = (0, _collection.filter)(this.state.onlyCountries, function (country) {
     return _lodash2.default.startsWith(country.name.toLowerCase(), queryString.toLowerCase());
-  }, this);
+  });
   return probableCountries[0];
 });
 
 ReactPhoneInput.prototype.guessSelectedCountry = _lodash2.default.memoize(function (inputNumber, onlyCountries) {
-  var secondBestGuess = (0, _collection.find)(allCountries, { iso2: this.props.defaultCountry }) || onlyCountries[0];
-  if (_lodash2.default.trim(inputNumber) !== '') {
-    var bestGuess = (0, _collection.reduce)(onlyCountries, function (selectedCountry, country) {
-      if (_lodash2.default.startsWith(inputNumber, country.dialCode)) {
-        if (country.dialCode.length > selectedCountry.dialCode.length) {
-          return country;
-        }
-        if (country.dialCode.length === selectedCountry.dialCode.length && country.priority < selectedCountry.priority) {
-          return country;
-        }
-      }
-
-      return selectedCountry;
-    }, { dialCode: '', priority: 10001 }, this);
-  } else {
+  var secondBestGuess = _lodash2.default.find(allCountries, { iso2: this.props.defaultCountry }) || onlyCountries[0];
+  if (_lodash2.default.trim(inputNumber) === '') {
     return secondBestGuess;
   }
+
+  var bestGuess = _lodash2.default.reduce(onlyCountries, function (selectedCountry, country) {
+    if (_lodash2.default.startsWith(inputNumber, country.dialCode)) {
+      if (country.dialCode.length > selectedCountry.dialCode.length) {
+        return country;
+      }
+      if (country.dialCode.length === selectedCountry.dialCode.length && country.priority < selectedCountry.priority) {
+        return country;
+      }
+    }
+
+    return selectedCountry;
+  }, { dialCode: '', priority: 10001 });
 
   if (!bestGuess.name) {
     return secondBestGuess;
